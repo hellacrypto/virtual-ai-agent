@@ -1,0 +1,60 @@
+{
+  "properties": [
+    {
+      "id": "prop001",
+      "address": "123 Main Street, Downtown, New York",
+      "price": 2100,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "features": ["In-unit laundry", "Hardwood floors", "Stainless steel appliances"],
+      "neighborhood": "Downtown",
+      "commute_time": 15,
+      "safety_score": 85,
+      "available_from": "2023-06-15",
+      "verified": true,
+      "images": ["apartment1_living.jpg", "apartment1_kitchen.jpg", "apartment1_bedroom.jpg"]
+    },
+    {
+      "id": "prop002",
+      "address": "456 Park Avenue, Midtown, New York",
+      "price": 1850,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "features": ["Fitness center", "Rooftop access", "Pet-friendly"],
+      "neighborhood": "Midtown",
+      "commute_time": 22,
+      "safety_score": 78,
+      "available_from": "2023-06-01",
+      "verified": true,
+      "images": ["apartment2_living.jpg", "apartment2_kitchen.jpg", "apartment2_bedroom.jpg"]
+    },
+    {
+      "id": "prop003",
+      "address": "789 Broadway, Uptown, New York",
+      "price": 1650,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "features": ["Renovated kitchen", "Natural light", "Storage unit"],
+      "neighborhood": "Uptown",
+      "commute_time": 30,
+      "safety_score": 82,
+      "available_from": "2023-07-01",
+      "verified": true,
+      "images": ["apartment3_living.jpg", "apartment3_kitchen.jpg", "apartment3_bedroom.jpg"]
+    },
+    {
+      "id": "prop004",
+      "address": "101 Ocean Drive, Venice Beach, Los Angeles",
+      "price": 2200,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "features": ["Ocean view", "Updated appliances", "Secured parking"],
+      "neighborhood": "Venice Beach",
+      "commute_time": 25,
+      "safety_score": 75,
+      "available_from": "2023-06-15",
+      "verified": false,
+      "images": ["apartment4_living.jpg", "apartment4_kitchen.jpg", "apartment4_bedroom.jpg"]
+    }
+  ]
+}
