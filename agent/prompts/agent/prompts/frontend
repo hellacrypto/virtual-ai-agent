@@ -1,0 +1,30 @@
+import { useState } from 'react';
+import styles from '../styles/Home.module.css';
+
+export default function Home() {
+  const [messages, setMessages] = useState([
+    {role: 'assistant', content: "I'm Virtuals, your personal rental search assistant. I'll help you find the perfect apartment that matches your budget and lifestyle. Let's start with some basics:\n\n- What's your monthly budget for rent?\n- How many bedrooms do you need?\n- Which city are you looking in?\n- What's your timeline for moving?\n- What are your top 3 must-haves in an apartment?"}
+  ]);
+  const [input, setInput] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Add user message
+    const updatedMessages = [...messages, {role: 'user', content: input}];
+    setMessages(updatedMessages);
+    setInput('');
+    
+    // Simulate AI response (replace with actual VY AI API call)
+    setTimeout(() => {
+      // Sample responses based on different user inputs
+      let response;
+      
+      if (input.toLowerCase().includes('budget') || input.toLowerCase().includes('$')) {
+        response = "Based on your budget, here's what this typically gets you in your target city:\n\n- In Downtown: Average 1BR is $2,100 with basic amenities\n- In Midtown: Average 1BR is $1,850 with good transit access\n- In Uptown: Average 1BR is $1,650 with fewer amenities\n\nWould you like me to focus on finding the best value within your current budget, or would you like to explore options for getting more features by adjusting your location?";
+      } else if (input.toLowerCase().includes('neighborhood') || input.toLowerCase().includes('area')) {
+        response = "Let me share some insights about Downtown:\n\nLIVING EXPERIENCE:\n• Resident satisfaction: 82/100 based on 500+ reviews\n• Primary demographic: Young professionals (25-40)\n• Noise levels: Moderate (peak hours between 10PM and 2AM)\n\nPRACTICALITIES:\n• Average commute to business district: 15 minutes\n• Closest grocery stores: Metro Market (0.2mi), Urban Foods (0.5mi)\n• Dining options: 32 restaurants within 10-minute walk\n• Safety score: 76/100 (city average: 72/100)\n\nWould you like me to focus on properties in this area or would you prefer exploring alternatives?";
+      } else if (input.toLowerCase().includes('property') || input.toLowerCase().includes('apartment')) {
+        response = "Based on your preferences, I've identified these promising options:\n\nPROPERTY 1: 742 Evergreen Terrace\n• $1,950/month, 1BR/1BA\n• Key features: In-unit laundry, Renovated kitchen, Fitness center\n• 20 minute commute to downtown\n• Neighborhood safety score: 87/100\n• Available from: June 1st\n• Property verification status: ✅ Verified by blockchain record\n\nI can schedule viewings, provide detailed neighborhood analysis, or negotiate terms on this property. What would you like to explore first?";
+      } else {
+        response = "I've analyzed your preferences. To help you find the perfect rental property, could you tell me a bit more about your lifestyle? For example:\n\n- Do you work remotely or commute to an office?\n- How important is access to public transportation
