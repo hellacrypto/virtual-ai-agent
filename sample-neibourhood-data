@@ -1,0 +1,43 @@
+{
+  "neighborhoods": [
+    {
+      "name": "Downtown",
+      "city": "New York",
+      "satisfaction_score": 82,
+      "demographic": "Young professionals (25-40)",
+      "noise_level": "Moderate",
+      "noise_peak_hours": "10PM-2AM",
+      "commute_to_business_district": 15,
+      "grocery_stores": ["Metro Market (0.2mi)", "Urban Foods (0.5mi)"],
+      "restaurants_count": 32,
+      "safety_score": 76,
+      "city_average_safety": 72
+    },
+    {
+      "name": "Midtown",
+      "city": "New York",
+      "satisfaction_score": 79,
+      "demographic": "Mixed professionals and families",
+      "noise_level": "Low to Moderate",
+      "noise_peak_hours": "8AM-6PM",
+      "commute_to_business_district": 10,
+      "grocery_stores": ["City Grocer (0.3mi)", "Fresh Mart (0.6mi)"],
+      "restaurants_count": 45,
+      "safety_score": 78,
+      "city_average_safety": 72
+    },
+    {
+      "name": "Venice Beach",
+      "city": "Los Angeles",
+      "satisfaction_score": 88,
+      "demographic": "Creative professionals and freelancers",
+      "noise_level": "Moderate to High",
+      "noise_peak_hours": "11AM-8PM",
+      "commute_to_business_district": 35,
+      "grocery_stores": ["Beachside Market (0.4mi)", "Organic Oasis (0.7mi)"],
+      "restaurants_count": 28,
+      "safety_score": 75,
+      "city_average_safety": 70
+    }
+  ]
+}
