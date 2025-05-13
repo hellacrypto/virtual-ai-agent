@@ -1,0 +1,125 @@
+# FlatFinder AI Agent MVP
+
+# === Backend (Python + FastAPI) ===
+
+# Requirements:
+# pip install fastapi uvicorn requests beautifulsoup4 lxml openai web3
+
+from fastapi import FastAPI, Query
+from pydantic import BaseModel
+from typing import List
+import requests
+from bs4 import BeautifulSoup
+import re
+import os
+import time
+from threading import Thread
+
+app = FastAPI()
+
+# === Config ===
+SCRAPE_INTERVAL_SECONDS = 3600  # every hour
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# === Input model ===
+class SearchRequest(BaseModel):
+    city: str
+    budget: int
+    pet: str
+    neighborhood: str
+    contact_ok: bool = False  # allow contacting landlords
+
+# === Mock DB ===
+found_listings = []
+user_request = None
+
+# === Scraper ===
+def scrape_craigslist(city, budget, pet, neighborhood):
+    url = f"https://{city}.craigslist.org/search/apa?max_price={budget}&availabilityMode=0&sale_date=all+dates"
+    print(f"Scraping {url}")
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, "lxml")
+    listings = []
+    for result in soup.select("li.result-row"):
+        title = result.select_one("a.result-title").text
+        price = result.select_one("span.result-price").text
+        link = result.select_one("a.result-title")["href"]
+        hood = result.select_one("span.result-hood")
+        hood_text = hood.text.strip(" ()") if hood else "Unknown"
+
+        listings.append({
+            "title": title,
+            "price": price,
+            "link": link,
+            "neighborhood": hood_text,
+        })
+    return listings
+
+# === AI/NLP Scam Filter ===
+def is_listing_scammy(listing):
+    prompt = f"Is this Craigslist rental listing a scam?\n\nTitle: {listing['title']}\nNeighborhood: {listing['neighborhood']}\nPrice: {listing['price']}\n\nAnswer yes or no and explain."
+    headers = {"Authorization": f"Bearer {OPENAI_API_KEY}"}
+    data = {
+        "model": "gpt-4",
+        "messages": [{"role": "user", "content": prompt}]
+    }
+    try:
+        res = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=data)
+        answer = res.json()["choices"][0]["message"]["content"].lower()
+        return "yes" in answer and ("likely scam" in answer or "yes" in answer)
+    except:
+        return False
+
+# === Sex Offender Check ===
+def is_near_sex_offender(address):
+    # Example: mock check using a static source (replace with real Ontario data set endpoint if available)
+    return False  # Stub logic
+
+# === Main Agent Logic ===
+def scan_and_filter():
+    global found_listings, user_request
+    if not user_request:
+        return
+    results = scrape_craigslist(user_request.city, user_request.budget, user_request.pet, user_request.neighborhood)
+    filtered = []
+    for listing in results:
+        if user_request.neighborhood.lower() not in listing["neighborhood"].lower():
+            continue
+        if is_listing_scammy(listing):
+            continue
+        if not user_request.pet.lower() in listing["title"].lower():
+            continue
+        if is_near_sex_offender(listing.get("address", "")):
+            continue
+        filtered.append(listing)
+    found_listings = filtered
+
+# === Background Scheduler ===
+def start_scheduler():
+    def loop():
+        while True:
+            try:
+                scan_and_filter()
+            except Exception as e:
+                print("Error in scheduler:", e)
+            time.sleep(SCRAPE_INTERVAL_SECONDS)
+    Thread(target=loop, daemon=True).start()
+
+# === API Routes ===
+@app.post("/search")
+def search(req: SearchRequest):
+    global user_request
+    user_request = req
+    scan_and_filter()
+    return {"status": "search started", "filters": req}
+
+@app.get("/results")
+def results():
+    return {"listings": found_listings}
+
+
+# === Entry Point ===
+if __name__ == "__main__":
+    start_scheduler()
+    import uvicorn
+    uvicorn.run("flatfinder:app", host="127.0.0.1", port=8000, reload=True)
